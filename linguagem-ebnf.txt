@@ -1,0 +1,148 @@
+Linguagem APS – Especificação EBNF 
+
+(*
+Objetivo
+  Esta gramática descreve uma linguagem mínima (e extensível) com:
+  - variáveis inteiras e booleanas;
+  - condicionais e laços;
+  - I/O básico (print/out);
+  - sensores somente-leitura;
+  - (funções removidas neste MVP).
+
+Notas
+  - Notação EBNF: "..." = terminal, [] = opcional, {{...}} = repetição, | = alternância.
+  - Comentários na EBNF: (* ... *)
+  - Semântica resumida (para codegen RISC-V):
+      * Resultado de expressão em a0; variáveis em offsets do frame (s0).
+      * Sensores são símbolos read-only; não podem aparecer como lvalue.
+      * print(expr) → ecall de saída; read <sensor> → valor do sensor em a0.
+  - Esta especificação foca em sintaxe; checagens (tipos, leitura-escrita) são da fase semântica.
+*)
+
+==============================
+1. Convenções Léxicas 
+==============================
+(* Estas regras são implementadas no lexer (Flex); aqui servem de referência. *)
+ident      = letra , {{ letra | dígito | "_" }} ;
+number     = dígito , {{ dígito }} ;
+string     = """ , {{ caractere_sem_aspas | escape }} , """ ;
+boolean    = "true" | "false" ;
+ws         = {{ " " | "\t" | "\r" | "\n" }} ;
+comment    = "//" , {{ não_quebra_linha }} , "\n"
+           | "/*" , {{ caractere_qualquer }} , "*/" ;
+
+letra      = "A"…"Z" | "a"…"z" | "_" ;
+dígito     = "0"…"9" ;
+
+reserved   = "let" | "const" | "if" | "else" | "while" | "for" | "break" | "continue"
+           | "print" | "out" | "read" | "every" | "when" | "bool" | "int" ;
+
+sensor-id  = "temp" | "doorOpen" | "clock_ms" (* ajustar à sua escolha de sensores *) ;
+
+==============================
+2. Programa
+==============================
+program        = {{ declaration | statement }} ;
+
+==============================
+3. Declarações e Tipos
+==============================
+declaration    = var_decl | const_decl ;
+
+var_decl       = "let" , ident , ":" , type , [ "=" , expression ] , ";" ;
+const_decl     = "const" , ident , ":" , type , "=" , expression , ";" ;
+
+type           = "int" | "bool" ;
+
+==============================
+4. Comandos (Statements)
+==============================
+statement      = block
+               | assign
+               | if_stmt
+               | while_stmt
+               | for_stmt
+               | io_stmt
+               | event_stmt
+               | break_stmt
+               | continue_stmt
+               | ";" ;
+
+block          = "{" , {{ declaration | statement }} , "}" ;
+
+assign         = lvalue , "=" , expression , ";" ;
+lvalue         = ident ;
+
+if_stmt        = "if" , "(" , expression , ")" , statement ,
+                 {{ "else" , "if" , "(" , expression , ")" , statement }} ,
+                 [ "else" , statement ] ;
+
+while_stmt     = "while" , "(" , expression , ")" , statement ;
+
+for_stmt       = "for" , "(" , ( var_decl | assign | ";" ) ,
+                           [ expression ] , ";" ,
+                           [ expression ] , ")" , statement ;
+
+io_stmt        = "print" , "(" , expression , ")" , ";"
+               | "out"   , "(" , expression , ")" , ";" ;
+
+event_stmt     = every_stmt | when_stmt ;
+
+every_stmt     = "every" , number , "ms" , block
+               (* Semântica: loop com espera; pode compilar para chamada a ecall de sleep/clock. *) ;
+
+when_stmt      = "when" , "(" , expression , ")" , block
+               (* Semântica: laço de vigilância: while (cond) {{ block }}. *) ;
+
+break_stmt     = "break" , ";" ;
+continue_stmt  = "continue" , ";" ;
+
+==============================
+5. Expressões
+==============================
+expression     = logical_or ;
+
+logical_or     = logical_and , {{ "||" , logical_and }} ;
+logical_and    = equality    , {{ "&&" , equality }} ;
+equality       = relational  , {{ ( "==" | "!=" ) , relational }} ;
+relational     = additive    , {{ ( "<" | ">" | "<=" | ">=" ) , additive }} ;
+additive       = multiplicative , {{ ( "+" | "-" ) , multiplicative }} ;
+multiplicative = unary , {{ ( "*" | "/" | "%" ) , unary }} ;
+
+unary          = ( "!" | "-" ) , unary
+               | primary ;
+
+primary        = number
+               | boolean
+               | string
+               | lvalue
+               | sensor_ref
+               | "(" , expression , ")" ;
+
+(* Sensores são valores somente-leitura disponíveis como primários. *)
+sensor_ref     = sensor-id ;
+
+==============================
+6. Precedência & Associatividade
+==============================
+(* Da mais baixa para a mais alta:
+   1) ||        (associativa à esquerda)
+   2) &&        (associativa à esquerda)
+   3) == !=     (associativa à esquerda)
+   4) < > <= >= (associativa à esquerda)
+   5) + -       (associativa à esquerda)
+   6) * / %     (associativa à esquerda)
+   7) ! - (unário) (associativa à direita)
+*)
+
+==============================
+7. Restrições Semânticas (não expressas na EBNF)
+==============================
+(* Checagens que o analisador semântico deve fazer:
+   - Identificadores devem ser declarados antes do uso.
+   - Não é permitido atribuir a sensor_ref (somente leitura).
+   - Tipos: operadores aritméticos em int; operadores lógicos/comparação em tipos compatíveis.
+   - Em laços, break/continue só são válidos dentro de while/for/when/every.
+   - Constantes (const) não podem receber atribuição posterior.
+   - Strings aceitas em print/out; demais contextos a definir conforme o backend.
+*)
