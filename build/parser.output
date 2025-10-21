@@ -60,55 +60,56 @@ Grammar
 
    36 opt_expr: /* empty */
    37         | expression
+   38         | assign
 
-   38 io_stmt: PRINT LPAREN expression RPAREN SEMI
-   39        | OUT LPAREN expression RPAREN SEMI
-   40        | READ LPAREN sensor_ref RPAREN SEMI
+   39 io_stmt: PRINT LPAREN expression RPAREN SEMI
+   40        | OUT LPAREN expression RPAREN SEMI
+   41        | READ LPAREN sensor_ref RPAREN SEMI
 
-   41 event_stmt: EVERY INT_LIT MS block
-   42           | WHEN LPAREN expression RPAREN block
+   42 event_stmt: EVERY INT_LIT MS block
+   43           | WHEN LPAREN expression RPAREN block
 
-   43 sensor_ref: TEMP
-   44           | DOOROPEN
-   45           | CLOCK_MS
+   44 sensor_ref: TEMP
+   45           | DOOROPEN
+   46           | CLOCK_MS
 
-   46 expression: logical_or
+   47 expression: logical_or
 
-   47 logical_or: logical_and
-   48           | logical_or OR logical_and
+   48 logical_or: logical_and
+   49           | logical_or OR logical_and
 
-   49 logical_and: equality
-   50            | logical_and AND equality
+   50 logical_and: equality
+   51            | logical_and AND equality
 
-   51 equality: relational
-   52         | equality EQ relational
-   53         | equality NEQ relational
+   52 equality: relational
+   53         | equality EQ relational
+   54         | equality NEQ relational
 
-   54 relational: additive
-   55           | relational LT additive
-   56           | relational LE additive
-   57           | relational GT additive
-   58           | relational GE additive
+   55 relational: additive
+   56           | relational LT additive
+   57           | relational LE additive
+   58           | relational GT additive
+   59           | relational GE additive
 
-   59 additive: multiplicative
-   60         | additive PLUS multiplicative
-   61         | additive MINUS multiplicative
+   60 additive: multiplicative
+   61         | additive PLUS multiplicative
+   62         | additive MINUS multiplicative
 
-   62 multiplicative: unary
-   63               | multiplicative STAR unary
-   64               | multiplicative SLASH unary
-   65               | multiplicative MOD unary
+   63 multiplicative: unary
+   64               | multiplicative STAR unary
+   65               | multiplicative SLASH unary
+   66               | multiplicative MOD unary
 
-   66 unary: primary
-   67      | NOT unary
-   68      | MINUS unary
+   67 unary: primary
+   68      | NOT unary
+   69      | MINUS unary
 
-   69 primary: INT_LIT
-   70        | TRUE_LIT
-   71        | FALSE_LIT
-   72        | IDENT
-   73        | sensor_ref
-   74        | LPAREN expression RPAREN
+   70 primary: INT_LIT
+   71        | TRUE_LIT
+   72        | FALSE_LIT
+   73        | IDENT
+   74        | sensor_ref
+   75        | LPAREN expression RPAREN
 
 
 Terminals, with rules where they appear
@@ -119,46 +120,46 @@ LET (258) 7 34
 CONST (259) 8
 KW_INT (260) 9
 KW_BOOL (261) 10
-TRUE_LIT (262) 70
-FALSE_LIT (263) 71
+TRUE_LIT (262) 71
+FALSE_LIT (263) 72
 IF (264) 29 30
 ELSE (265) 30
 WHILE (266) 31
 FOR (267) 32
 BREAK (268) 20
 CONTINUE (269) 21
-PRINT (270) 38
-OUT (271) 39
-READ (272) 40
-EVERY (273) 41
-WHEN (274) 42
-MS (275) 41
-TEMP (276) 43
-DOOROPEN (277) 44
-CLOCK_MS (278) 45
-IDENT (279) 7 8 28 34 72
-INT_LIT (280) 41 69
-EQ (281) 52
-NEQ (282) 53
-LE (283) 56
-GE (284) 58
-LT (285) 55
-GT (286) 57
-AND (287) 50
-OR (288) 48
+PRINT (270) 39
+OUT (271) 40
+READ (272) 41
+EVERY (273) 42
+WHEN (274) 43
+MS (275) 42
+TEMP (276) 44
+DOOROPEN (277) 45
+CLOCK_MS (278) 46
+IDENT (279) 7 8 28 34 73
+INT_LIT (280) 42 70
+EQ (281) 53
+NEQ (282) 54
+LE (283) 57
+GE (284) 59
+LT (285) 56
+GT (286) 58
+AND (287) 51
+OR (288) 49
 ASSIGN (289) 8 12 27 35
-PLUS (290) 60
-MINUS (291) 61 68
-STAR (292) 63
-SLASH (293) 64
-MOD (294) 65
-NOT (295) 67
-LPAREN (296) 29 30 31 32 38 39 40 42 74
-RPAREN (297) 29 30 31 32 38 39 40 42 74
+PLUS (290) 61
+MINUS (291) 62 69
+STAR (292) 64
+SLASH (293) 65
+MOD (294) 66
+NOT (295) 68
+LPAREN (296) 29 30 31 32 39 40 41 43 75
+RPAREN (297) 29 30 31 32 39 40 41 43 75
 LBRACE (298) 23
 RBRACE (299) 23
 COMMA (300)
-SEMI (301) 7 8 14 20 21 22 32 38 39 40
+SEMI (301) 7 8 14 20 21 22 32 39 40 41
 COLON (302) 7 8 34
 UMINUS (303)
 NO_ELSE (304)
@@ -186,11 +187,11 @@ statement (58)
     on left: 13 14 15 16 17 18 19 20 21 22, on right: 4 26 29 30 31
     32
 block (59)
-    on left: 23, on right: 13 41 42
+    on left: 23, on right: 13 42 43
 block_items (60)
     on left: 24 25 26, on right: 23 25 26
 assign (61)
-    on left: 27, on right: 14
+    on left: 27, on right: 14 38
 lvalue (62)
     on left: 28, on right: 27 35
 if_stmt (63)
@@ -202,31 +203,31 @@ for_stmt (65)
 for_init (66)
     on left: 33 34 35, on right: 32
 opt_expr (67)
-    on left: 36 37, on right: 32
+    on left: 36 37 38, on right: 32
 io_stmt (68)
-    on left: 38 39 40, on right: 18
+    on left: 39 40 41, on right: 18
 event_stmt (69)
-    on left: 41 42, on right: 19
+    on left: 42 43, on right: 19
 sensor_ref (70)
-    on left: 43 44 45, on right: 40 73
+    on left: 44 45 46, on right: 41 74
 expression (71)
-    on left: 46, on right: 8 12 27 29 30 31 35 37 38 39 42 74
+    on left: 47, on right: 8 12 27 29 30 31 35 37 39 40 43 75
 logical_or (72)
-    on left: 47 48, on right: 46 48
+    on left: 48 49, on right: 47 49
 logical_and (73)
-    on left: 49 50, on right: 47 48 50
+    on left: 50 51, on right: 48 49 51
 equality (74)
-    on left: 51 52 53, on right: 49 50 52 53
+    on left: 52 53 54, on right: 50 51 53 54
 relational (75)
-    on left: 54 55 56 57 58, on right: 51 52 53 55 56 57 58
+    on left: 55 56 57 58 59, on right: 52 53 54 56 57 58 59
 additive (76)
-    on left: 59 60 61, on right: 54 55 56 57 58 60 61
+    on left: 60 61 62, on right: 55 56 57 58 59 61 62
 multiplicative (77)
-    on left: 62 63 64 65, on right: 59 60 61 63 64 65
+    on left: 63 64 65 66, on right: 60 61 62 64 65 66
 unary (78)
-    on left: 66 67 68, on right: 62 63 64 65 67 68
+    on left: 67 68 69, on right: 63 64 65 66 68 69
 primary (79)
-    on left: 69 70 71 72 73 74, on right: 66
+    on left: 70 71 72 73 74 75, on right: 67
 
 
 state 0
@@ -334,35 +335,35 @@ state 9
 
 state 10
 
-   38 io_stmt: PRINT . LPAREN expression RPAREN SEMI
+   39 io_stmt: PRINT . LPAREN expression RPAREN SEMI
 
     LPAREN  shift, and go to state 38
 
 
 state 11
 
-   39 io_stmt: OUT . LPAREN expression RPAREN SEMI
+   40 io_stmt: OUT . LPAREN expression RPAREN SEMI
 
     LPAREN  shift, and go to state 39
 
 
 state 12
 
-   40 io_stmt: READ . LPAREN sensor_ref RPAREN SEMI
+   41 io_stmt: READ . LPAREN sensor_ref RPAREN SEMI
 
     LPAREN  shift, and go to state 40
 
 
 state 13
 
-   41 event_stmt: EVERY . INT_LIT MS block
+   42 event_stmt: EVERY . INT_LIT MS block
 
     INT_LIT  shift, and go to state 41
 
 
 state 14
 
-   42 event_stmt: WHEN . LPAREN expression RPAREN block
+   43 event_stmt: WHEN . LPAREN expression RPAREN block
 
     LPAREN  shift, and go to state 42
 
@@ -579,7 +580,7 @@ state 37
 
 state 38
 
-   38 io_stmt: PRINT LPAREN . expression RPAREN SEMI
+   39 io_stmt: PRINT LPAREN . expression RPAREN SEMI
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -606,7 +607,7 @@ state 38
 
 state 39
 
-   39 io_stmt: OUT LPAREN . expression RPAREN SEMI
+   40 io_stmt: OUT LPAREN . expression RPAREN SEMI
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -633,7 +634,7 @@ state 39
 
 state 40
 
-   40 io_stmt: READ LPAREN . sensor_ref RPAREN SEMI
+   41 io_stmt: READ LPAREN . sensor_ref RPAREN SEMI
 
     TEMP      shift, and go to state 50
     DOOROPEN  shift, and go to state 51
@@ -644,14 +645,14 @@ state 40
 
 state 41
 
-   41 event_stmt: EVERY INT_LIT . MS block
+   42 event_stmt: EVERY INT_LIT . MS block
 
     MS  shift, and go to state 75
 
 
 state 42
 
-   42 event_stmt: WHEN LPAREN . expression RPAREN block
+   43 event_stmt: WHEN LPAREN . expression RPAREN block
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -769,56 +770,56 @@ state 47
 
 state 48
 
-   70 primary: TRUE_LIT .
-
-    $default  reduce using rule 70 (primary)
-
-
-state 49
-
-   71 primary: FALSE_LIT .
+   71 primary: TRUE_LIT .
 
     $default  reduce using rule 71 (primary)
 
 
-state 50
+state 49
 
-   43 sensor_ref: TEMP .
-
-    $default  reduce using rule 43 (sensor_ref)
-
-
-state 51
-
-   44 sensor_ref: DOOROPEN .
-
-    $default  reduce using rule 44 (sensor_ref)
-
-
-state 52
-
-   45 sensor_ref: CLOCK_MS .
-
-    $default  reduce using rule 45 (sensor_ref)
-
-
-state 53
-
-   72 primary: IDENT .
+   72 primary: FALSE_LIT .
 
     $default  reduce using rule 72 (primary)
 
 
+state 50
+
+   44 sensor_ref: TEMP .
+
+    $default  reduce using rule 44 (sensor_ref)
+
+
+state 51
+
+   45 sensor_ref: DOOROPEN .
+
+    $default  reduce using rule 45 (sensor_ref)
+
+
+state 52
+
+   46 sensor_ref: CLOCK_MS .
+
+    $default  reduce using rule 46 (sensor_ref)
+
+
+state 53
+
+   73 primary: IDENT .
+
+    $default  reduce using rule 73 (primary)
+
+
 state 54
 
-   69 primary: INT_LIT .
+   70 primary: INT_LIT .
 
-    $default  reduce using rule 69 (primary)
+    $default  reduce using rule 70 (primary)
 
 
 state 55
 
-   68 unary: MINUS . unary
+   69 unary: MINUS . unary
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -838,7 +839,7 @@ state 55
 
 state 56
 
-   67 unary: NOT . unary
+   68 unary: NOT . unary
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -858,7 +859,7 @@ state 56
 
 state 57
 
-   74 primary: LPAREN . expression RPAREN
+   75 primary: LPAREN . expression RPAREN
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -885,9 +886,9 @@ state 57
 
 state 58
 
-   73 primary: sensor_ref .
+   74 primary: sensor_ref .
 
-    $default  reduce using rule 73 (primary)
+    $default  reduce using rule 74 (primary)
 
 
 state 59
@@ -900,90 +901,90 @@ state 59
 
 state 60
 
-   46 expression: logical_or .
-   48 logical_or: logical_or . OR logical_and
+   47 expression: logical_or .
+   49 logical_or: logical_or . OR logical_and
 
     OR  shift, and go to state 89
 
-    $default  reduce using rule 46 (expression)
+    $default  reduce using rule 47 (expression)
 
 
 state 61
 
-   47 logical_or: logical_and .
-   50 logical_and: logical_and . AND equality
+   48 logical_or: logical_and .
+   51 logical_and: logical_and . AND equality
 
     AND  shift, and go to state 90
 
-    $default  reduce using rule 47 (logical_or)
+    $default  reduce using rule 48 (logical_or)
 
 
 state 62
 
-   49 logical_and: equality .
-   52 equality: equality . EQ relational
-   53         | equality . NEQ relational
+   50 logical_and: equality .
+   53 equality: equality . EQ relational
+   54         | equality . NEQ relational
 
     EQ   shift, and go to state 91
     NEQ  shift, and go to state 92
 
-    $default  reduce using rule 49 (logical_and)
+    $default  reduce using rule 50 (logical_and)
 
 
 state 63
 
-   51 equality: relational .
-   55 relational: relational . LT additive
-   56           | relational . LE additive
-   57           | relational . GT additive
-   58           | relational . GE additive
+   52 equality: relational .
+   56 relational: relational . LT additive
+   57           | relational . LE additive
+   58           | relational . GT additive
+   59           | relational . GE additive
 
     LE  shift, and go to state 93
     GE  shift, and go to state 94
     LT  shift, and go to state 95
     GT  shift, and go to state 96
 
-    $default  reduce using rule 51 (equality)
+    $default  reduce using rule 52 (equality)
 
 
 state 64
 
-   54 relational: additive .
-   60 additive: additive . PLUS multiplicative
-   61         | additive . MINUS multiplicative
+   55 relational: additive .
+   61 additive: additive . PLUS multiplicative
+   62         | additive . MINUS multiplicative
 
     PLUS   shift, and go to state 97
     MINUS  shift, and go to state 98
 
-    $default  reduce using rule 54 (relational)
+    $default  reduce using rule 55 (relational)
 
 
 state 65
 
-   59 additive: multiplicative .
-   63 multiplicative: multiplicative . STAR unary
-   64               | multiplicative . SLASH unary
-   65               | multiplicative . MOD unary
+   60 additive: multiplicative .
+   64 multiplicative: multiplicative . STAR unary
+   65               | multiplicative . SLASH unary
+   66               | multiplicative . MOD unary
 
     STAR   shift, and go to state 99
     SLASH  shift, and go to state 100
     MOD    shift, and go to state 101
 
-    $default  reduce using rule 59 (additive)
+    $default  reduce using rule 60 (additive)
 
 
 state 66
 
-   62 multiplicative: unary .
+   63 multiplicative: unary .
 
-    $default  reduce using rule 62 (multiplicative)
+    $default  reduce using rule 63 (multiplicative)
 
 
 state 67
 
-   66 unary: primary .
+   67 unary: primary .
 
-    $default  reduce using rule 66 (unary)
+    $default  reduce using rule 67 (unary)
 
 
 state 68
@@ -1016,28 +1017,28 @@ state 71
 
 state 72
 
-   38 io_stmt: PRINT LPAREN expression . RPAREN SEMI
+   39 io_stmt: PRINT LPAREN expression . RPAREN SEMI
 
     RPAREN  shift, and go to state 106
 
 
 state 73
 
-   39 io_stmt: OUT LPAREN expression . RPAREN SEMI
+   40 io_stmt: OUT LPAREN expression . RPAREN SEMI
 
     RPAREN  shift, and go to state 107
 
 
 state 74
 
-   40 io_stmt: READ LPAREN sensor_ref . RPAREN SEMI
+   41 io_stmt: READ LPAREN sensor_ref . RPAREN SEMI
 
     RPAREN  shift, and go to state 108
 
 
 state 75
 
-   41 event_stmt: EVERY INT_LIT MS . block
+   42 event_stmt: EVERY INT_LIT MS . block
 
     LBRACE  shift, and go to state 16
 
@@ -1046,7 +1047,7 @@ state 75
 
 state 76
 
-   42 event_stmt: WHEN LPAREN expression . RPAREN block
+   43 event_stmt: WHEN LPAREN expression . RPAREN block
 
     RPAREN  shift, and go to state 110
 
@@ -1113,21 +1114,21 @@ state 84
 
 state 85
 
-   68 unary: MINUS unary .
+   69 unary: MINUS unary .
 
-    $default  reduce using rule 68 (unary)
+    $default  reduce using rule 69 (unary)
 
 
 state 86
 
-   67 unary: NOT unary .
+   68 unary: NOT unary .
 
-    $default  reduce using rule 67 (unary)
+    $default  reduce using rule 68 (unary)
 
 
 state 87
 
-   74 primary: LPAREN expression . RPAREN
+   75 primary: LPAREN expression . RPAREN
 
     RPAREN  shift, and go to state 114
 
@@ -1164,7 +1165,7 @@ state 88
 
 state 89
 
-   48 logical_or: logical_or OR . logical_and
+   49 logical_or: logical_or OR . logical_and
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1189,7 +1190,7 @@ state 89
 
 state 90
 
-   50 logical_and: logical_and AND . equality
+   51 logical_and: logical_and AND . equality
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1213,7 +1214,7 @@ state 90
 
 state 91
 
-   52 equality: equality EQ . relational
+   53 equality: equality EQ . relational
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1236,7 +1237,7 @@ state 91
 
 state 92
 
-   53 equality: equality NEQ . relational
+   54 equality: equality NEQ . relational
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1259,7 +1260,7 @@ state 92
 
 state 93
 
-   56 relational: relational LE . additive
+   57 relational: relational LE . additive
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1281,7 +1282,7 @@ state 93
 
 state 94
 
-   58 relational: relational GE . additive
+   59 relational: relational GE . additive
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1303,7 +1304,7 @@ state 94
 
 state 95
 
-   55 relational: relational LT . additive
+   56 relational: relational LT . additive
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1325,7 +1326,7 @@ state 95
 
 state 96
 
-   57 relational: relational GT . additive
+   58 relational: relational GT . additive
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1347,7 +1348,7 @@ state 96
 
 state 97
 
-   60 additive: additive PLUS . multiplicative
+   61 additive: additive PLUS . multiplicative
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1368,7 +1369,7 @@ state 97
 
 state 98
 
-   61 additive: additive MINUS . multiplicative
+   62 additive: additive MINUS . multiplicative
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1389,7 +1390,7 @@ state 98
 
 state 99
 
-   63 multiplicative: multiplicative STAR . unary
+   64 multiplicative: multiplicative STAR . unary
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1409,7 +1410,7 @@ state 99
 
 state 100
 
-   64 multiplicative: multiplicative SLASH . unary
+   65 multiplicative: multiplicative SLASH . unary
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1429,7 +1430,7 @@ state 100
 
 state 101
 
-   65 multiplicative: multiplicative MOD . unary
+   66 multiplicative: multiplicative MOD . unary
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1519,7 +1520,7 @@ state 105
     TEMP       shift, and go to state 50
     DOOROPEN   shift, and go to state 51
     CLOCK_MS   shift, and go to state 52
-    IDENT      shift, and go to state 53
+    IDENT      shift, and go to state 132
     INT_LIT    shift, and go to state 54
     MINUS      shift, and go to state 55
     NOT        shift, and go to state 56
@@ -1527,9 +1528,11 @@ state 105
 
     $default  reduce using rule 36 (opt_expr)
 
-    opt_expr        go to state 132
+    assign          go to state 133
+    lvalue          go to state 25
+    opt_expr        go to state 134
     sensor_ref      go to state 58
-    expression      go to state 133
+    expression      go to state 135
     logical_or      go to state 60
     logical_and     go to state 61
     equality        go to state 62
@@ -1542,78 +1545,44 @@ state 105
 
 state 106
 
-   38 io_stmt: PRINT LPAREN expression RPAREN . SEMI
-
-    SEMI  shift, and go to state 134
-
-
-state 107
-
-   39 io_stmt: OUT LPAREN expression RPAREN . SEMI
-
-    SEMI  shift, and go to state 135
-
-
-state 108
-
-   40 io_stmt: READ LPAREN sensor_ref RPAREN . SEMI
+   39 io_stmt: PRINT LPAREN expression RPAREN . SEMI
 
     SEMI  shift, and go to state 136
 
 
+state 107
+
+   40 io_stmt: OUT LPAREN expression RPAREN . SEMI
+
+    SEMI  shift, and go to state 137
+
+
+state 108
+
+   41 io_stmt: READ LPAREN sensor_ref RPAREN . SEMI
+
+    SEMI  shift, and go to state 138
+
+
 state 109
 
-   41 event_stmt: EVERY INT_LIT MS block .
+   42 event_stmt: EVERY INT_LIT MS block .
 
-    $default  reduce using rule 41 (event_stmt)
+    $default  reduce using rule 42 (event_stmt)
 
 
 state 110
 
-   42 event_stmt: WHEN LPAREN expression RPAREN . block
+   43 event_stmt: WHEN LPAREN expression RPAREN . block
 
     LBRACE  shift, and go to state 16
 
-    block  go to state 137
+    block  go to state 139
 
 
 state 111
 
    12 opt_init: ASSIGN . expression
-
-    TRUE_LIT   shift, and go to state 48
-    FALSE_LIT  shift, and go to state 49
-    TEMP       shift, and go to state 50
-    DOOROPEN   shift, and go to state 51
-    CLOCK_MS   shift, and go to state 52
-    IDENT      shift, and go to state 53
-    INT_LIT    shift, and go to state 54
-    MINUS      shift, and go to state 55
-    NOT        shift, and go to state 56
-    LPAREN     shift, and go to state 57
-
-    sensor_ref      go to state 58
-    expression      go to state 138
-    logical_or      go to state 60
-    logical_and     go to state 61
-    equality        go to state 62
-    relational      go to state 63
-    additive        go to state 64
-    multiplicative  go to state 65
-    unary           go to state 66
-    primary         go to state 67
-
-
-state 112
-
-    7 var_decl: LET IDENT COLON type opt_init . SEMI
-
-    SEMI  shift, and go to state 139
-
-
-state 113
-
-    8 const_decl: CONST IDENT COLON type ASSIGN . expression SEMI
 
     TRUE_LIT   shift, and go to state 48
     FALSE_LIT  shift, and go to state 49
@@ -1638,11 +1607,45 @@ state 113
     primary         go to state 67
 
 
+state 112
+
+    7 var_decl: LET IDENT COLON type opt_init . SEMI
+
+    SEMI  shift, and go to state 141
+
+
+state 113
+
+    8 const_decl: CONST IDENT COLON type ASSIGN . expression SEMI
+
+    TRUE_LIT   shift, and go to state 48
+    FALSE_LIT  shift, and go to state 49
+    TEMP       shift, and go to state 50
+    DOOROPEN   shift, and go to state 51
+    CLOCK_MS   shift, and go to state 52
+    IDENT      shift, and go to state 53
+    INT_LIT    shift, and go to state 54
+    MINUS      shift, and go to state 55
+    NOT        shift, and go to state 56
+    LPAREN     shift, and go to state 57
+
+    sensor_ref      go to state 58
+    expression      go to state 142
+    logical_or      go to state 60
+    logical_and     go to state 61
+    equality        go to state 62
+    relational      go to state 63
+    additive        go to state 64
+    multiplicative  go to state 65
+    unary           go to state 66
+    primary         go to state 67
+
+
 state 114
 
-   74 primary: LPAREN expression RPAREN .
+   75 primary: LPAREN expression RPAREN .
 
-    $default  reduce using rule 74 (primary)
+    $default  reduce using rule 75 (primary)
 
 
 state 115
@@ -1650,56 +1653,40 @@ state 115
    29 if_stmt: IF LPAREN expression RPAREN statement .
    30        | IF LPAREN expression RPAREN statement . ELSE statement
 
-    ELSE  shift, and go to state 141
+    ELSE  shift, and go to state 143
 
     $default  reduce using rule 29 (if_stmt)
 
 
 state 116
 
-   48 logical_or: logical_or OR logical_and .
-   50 logical_and: logical_and . AND equality
+   49 logical_or: logical_or OR logical_and .
+   51 logical_and: logical_and . AND equality
 
     AND  shift, and go to state 90
 
-    $default  reduce using rule 48 (logical_or)
+    $default  reduce using rule 49 (logical_or)
 
 
 state 117
 
-   50 logical_and: logical_and AND equality .
-   52 equality: equality . EQ relational
-   53         | equality . NEQ relational
+   51 logical_and: logical_and AND equality .
+   53 equality: equality . EQ relational
+   54         | equality . NEQ relational
 
     EQ   shift, and go to state 91
     NEQ  shift, and go to state 92
 
-    $default  reduce using rule 50 (logical_and)
+    $default  reduce using rule 51 (logical_and)
 
 
 state 118
 
-   52 equality: equality EQ relational .
-   55 relational: relational . LT additive
-   56           | relational . LE additive
-   57           | relational . GT additive
-   58           | relational . GE additive
-
-    LE  shift, and go to state 93
-    GE  shift, and go to state 94
-    LT  shift, and go to state 95
-    GT  shift, and go to state 96
-
-    $default  reduce using rule 52 (equality)
-
-
-state 119
-
-   53 equality: equality NEQ relational .
-   55 relational: relational . LT additive
-   56           | relational . LE additive
-   57           | relational . GT additive
-   58           | relational . GE additive
+   53 equality: equality EQ relational .
+   56 relational: relational . LT additive
+   57           | relational . LE additive
+   58           | relational . GT additive
+   59           | relational . GE additive
 
     LE  shift, and go to state 93
     GE  shift, and go to state 94
@@ -1709,47 +1696,27 @@ state 119
     $default  reduce using rule 53 (equality)
 
 
+state 119
+
+   54 equality: equality NEQ relational .
+   56 relational: relational . LT additive
+   57           | relational . LE additive
+   58           | relational . GT additive
+   59           | relational . GE additive
+
+    LE  shift, and go to state 93
+    GE  shift, and go to state 94
+    LT  shift, and go to state 95
+    GT  shift, and go to state 96
+
+    $default  reduce using rule 54 (equality)
+
+
 state 120
 
-   56 relational: relational LE additive .
-   60 additive: additive . PLUS multiplicative
-   61         | additive . MINUS multiplicative
-
-    PLUS   shift, and go to state 97
-    MINUS  shift, and go to state 98
-
-    $default  reduce using rule 56 (relational)
-
-
-state 121
-
-   58 relational: relational GE additive .
-   60 additive: additive . PLUS multiplicative
-   61         | additive . MINUS multiplicative
-
-    PLUS   shift, and go to state 97
-    MINUS  shift, and go to state 98
-
-    $default  reduce using rule 58 (relational)
-
-
-state 122
-
-   55 relational: relational LT additive .
-   60 additive: additive . PLUS multiplicative
-   61         | additive . MINUS multiplicative
-
-    PLUS   shift, and go to state 97
-    MINUS  shift, and go to state 98
-
-    $default  reduce using rule 55 (relational)
-
-
-state 123
-
-   57 relational: relational GT additive .
-   60 additive: additive . PLUS multiplicative
-   61         | additive . MINUS multiplicative
+   57 relational: relational LE additive .
+   61 additive: additive . PLUS multiplicative
+   62         | additive . MINUS multiplicative
 
     PLUS   shift, and go to state 97
     MINUS  shift, and go to state 98
@@ -1757,26 +1724,48 @@ state 123
     $default  reduce using rule 57 (relational)
 
 
+state 121
+
+   59 relational: relational GE additive .
+   61 additive: additive . PLUS multiplicative
+   62         | additive . MINUS multiplicative
+
+    PLUS   shift, and go to state 97
+    MINUS  shift, and go to state 98
+
+    $default  reduce using rule 59 (relational)
+
+
+state 122
+
+   56 relational: relational LT additive .
+   61 additive: additive . PLUS multiplicative
+   62         | additive . MINUS multiplicative
+
+    PLUS   shift, and go to state 97
+    MINUS  shift, and go to state 98
+
+    $default  reduce using rule 56 (relational)
+
+
+state 123
+
+   58 relational: relational GT additive .
+   61 additive: additive . PLUS multiplicative
+   62         | additive . MINUS multiplicative
+
+    PLUS   shift, and go to state 97
+    MINUS  shift, and go to state 98
+
+    $default  reduce using rule 58 (relational)
+
+
 state 124
 
-   60 additive: additive PLUS multiplicative .
-   63 multiplicative: multiplicative . STAR unary
-   64               | multiplicative . SLASH unary
-   65               | multiplicative . MOD unary
-
-    STAR   shift, and go to state 99
-    SLASH  shift, and go to state 100
-    MOD    shift, and go to state 101
-
-    $default  reduce using rule 60 (additive)
-
-
-state 125
-
-   61 additive: additive MINUS multiplicative .
-   63 multiplicative: multiplicative . STAR unary
-   64               | multiplicative . SLASH unary
-   65               | multiplicative . MOD unary
+   61 additive: additive PLUS multiplicative .
+   64 multiplicative: multiplicative . STAR unary
+   65               | multiplicative . SLASH unary
+   66               | multiplicative . MOD unary
 
     STAR   shift, and go to state 99
     SLASH  shift, and go to state 100
@@ -1785,25 +1774,39 @@ state 125
     $default  reduce using rule 61 (additive)
 
 
+state 125
+
+   62 additive: additive MINUS multiplicative .
+   64 multiplicative: multiplicative . STAR unary
+   65               | multiplicative . SLASH unary
+   66               | multiplicative . MOD unary
+
+    STAR   shift, and go to state 99
+    SLASH  shift, and go to state 100
+    MOD    shift, and go to state 101
+
+    $default  reduce using rule 62 (additive)
+
+
 state 126
 
-   63 multiplicative: multiplicative STAR unary .
-
-    $default  reduce using rule 63 (multiplicative)
-
-
-state 127
-
-   64 multiplicative: multiplicative SLASH unary .
+   64 multiplicative: multiplicative STAR unary .
 
     $default  reduce using rule 64 (multiplicative)
 
 
-state 128
+state 127
 
-   65 multiplicative: multiplicative MOD unary .
+   65 multiplicative: multiplicative SLASH unary .
 
     $default  reduce using rule 65 (multiplicative)
+
+
+state 128
+
+   66 multiplicative: multiplicative MOD unary .
+
+    $default  reduce using rule 66 (multiplicative)
 
 
 state 129
@@ -1820,7 +1823,7 @@ state 130
     KW_INT   shift, and go to state 81
     KW_BOOL  shift, and go to state 82
 
-    type  go to state 142
+    type  go to state 144
 
 
 state 131
@@ -1832,68 +1835,84 @@ state 131
 
 state 132
 
-   32 for_stmt: FOR LPAREN for_init SEMI opt_expr . SEMI opt_expr RPAREN statement
+   28 lvalue: IDENT .
+   73 primary: IDENT .
 
-    SEMI  shift, and go to state 143
+    ASSIGN    reduce using rule 28 (lvalue)
+    $default  reduce using rule 73 (primary)
 
 
 state 133
+
+   38 opt_expr: assign .
+
+    $default  reduce using rule 38 (opt_expr)
+
+
+state 134
+
+   32 for_stmt: FOR LPAREN for_init SEMI opt_expr . SEMI opt_expr RPAREN statement
+
+    SEMI  shift, and go to state 145
+
+
+state 135
 
    37 opt_expr: expression .
 
     $default  reduce using rule 37 (opt_expr)
 
 
-state 134
+state 136
 
-   38 io_stmt: PRINT LPAREN expression RPAREN SEMI .
-
-    $default  reduce using rule 38 (io_stmt)
-
-
-state 135
-
-   39 io_stmt: OUT LPAREN expression RPAREN SEMI .
+   39 io_stmt: PRINT LPAREN expression RPAREN SEMI .
 
     $default  reduce using rule 39 (io_stmt)
 
 
-state 136
+state 137
 
-   40 io_stmt: READ LPAREN sensor_ref RPAREN SEMI .
+   40 io_stmt: OUT LPAREN expression RPAREN SEMI .
 
     $default  reduce using rule 40 (io_stmt)
 
 
-state 137
-
-   42 event_stmt: WHEN LPAREN expression RPAREN block .
-
-    $default  reduce using rule 42 (event_stmt)
-
-
 state 138
+
+   41 io_stmt: READ LPAREN sensor_ref RPAREN SEMI .
+
+    $default  reduce using rule 41 (io_stmt)
+
+
+state 139
+
+   43 event_stmt: WHEN LPAREN expression RPAREN block .
+
+    $default  reduce using rule 43 (event_stmt)
+
+
+state 140
 
    12 opt_init: ASSIGN expression .
 
     $default  reduce using rule 12 (opt_init)
 
 
-state 139
+state 141
 
     7 var_decl: LET IDENT COLON type opt_init SEMI .
 
     $default  reduce using rule 7 (var_decl)
 
 
-state 140
+state 142
 
     8 const_decl: CONST IDENT COLON type ASSIGN expression . SEMI
 
-    SEMI  shift, and go to state 144
+    SEMI  shift, and go to state 146
 
 
-state 141
+state 143
 
    30 if_stmt: IF LPAREN expression RPAREN statement ELSE . statement
 
@@ -1911,7 +1930,7 @@ state 141
     LBRACE    shift, and go to state 16
     SEMI      shift, and go to state 17
 
-    statement   go to state 145
+    statement   go to state 147
     block       go to state 23
     assign      go to state 24
     lvalue      go to state 25
@@ -1922,7 +1941,7 @@ state 141
     event_stmt  go to state 30
 
 
-state 142
+state 144
 
    34 for_init: LET IDENT COLON type . opt_init
 
@@ -1930,10 +1949,10 @@ state 142
 
     $default  reduce using rule 11 (opt_init)
 
-    opt_init  go to state 146
+    opt_init  go to state 148
 
 
-state 143
+state 145
 
    32 for_stmt: FOR LPAREN for_init SEMI opt_expr SEMI . opt_expr RPAREN statement
 
@@ -1942,7 +1961,7 @@ state 143
     TEMP       shift, and go to state 50
     DOOROPEN   shift, and go to state 51
     CLOCK_MS   shift, and go to state 52
-    IDENT      shift, and go to state 53
+    IDENT      shift, and go to state 132
     INT_LIT    shift, and go to state 54
     MINUS      shift, and go to state 55
     NOT        shift, and go to state 56
@@ -1950,9 +1969,11 @@ state 143
 
     $default  reduce using rule 36 (opt_expr)
 
-    opt_expr        go to state 147
+    assign          go to state 133
+    lvalue          go to state 25
+    opt_expr        go to state 149
     sensor_ref      go to state 58
-    expression      go to state 133
+    expression      go to state 135
     logical_or      go to state 60
     logical_and     go to state 61
     equality        go to state 62
@@ -1963,35 +1984,35 @@ state 143
     primary         go to state 67
 
 
-state 144
+state 146
 
     8 const_decl: CONST IDENT COLON type ASSIGN expression SEMI .
 
     $default  reduce using rule 8 (const_decl)
 
 
-state 145
+state 147
 
    30 if_stmt: IF LPAREN expression RPAREN statement ELSE statement .
 
     $default  reduce using rule 30 (if_stmt)
 
 
-state 146
+state 148
 
    34 for_init: LET IDENT COLON type opt_init .
 
     $default  reduce using rule 34 (for_init)
 
 
-state 147
+state 149
 
    32 for_stmt: FOR LPAREN for_init SEMI opt_expr SEMI opt_expr . RPAREN statement
 
-    RPAREN  shift, and go to state 148
+    RPAREN  shift, and go to state 150
 
 
-state 148
+state 150
 
    32 for_stmt: FOR LPAREN for_init SEMI opt_expr SEMI opt_expr RPAREN . statement
 
@@ -2009,7 +2030,7 @@ state 148
     LBRACE    shift, and go to state 16
     SEMI      shift, and go to state 17
 
-    statement   go to state 149
+    statement   go to state 151
     block       go to state 23
     assign      go to state 24
     lvalue      go to state 25
@@ -2020,7 +2041,7 @@ state 148
     event_stmt  go to state 30
 
 
-state 149
+state 151
 
    32 for_stmt: FOR LPAREN for_init SEMI opt_expr SEMI opt_expr RPAREN statement .
 

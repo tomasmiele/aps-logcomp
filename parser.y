@@ -118,6 +118,7 @@ for_init
 opt_expr
   : /* vazio */
   | expression
+  | assign
   ;
 
 io_stmt

@@ -1,0 +1,33 @@
+// OK — declarações, if/else-if/else, while, for, I/O e sensores
+
+let x: int = 0;
+let y: int;
+const LIM: int = 5;
+let flag: bool = true;
+
+if (x < LIM) {
+  x = x + 1;
+} else if (doorOpen) {
+  x = x + 2;
+} else {
+  x = x + 3;
+}
+
+while (x < 10) {
+  print(x);
+  x = x + 1;
+}
+
+for (let i: int = 0; i < 3; i = i + 1) {
+  out(i);
+}
+
+when (temp < 40) {
+  print(temp);
+}
+
+every 100 ms {
+  print(clock_ms);
+}
+
+read(temp);
