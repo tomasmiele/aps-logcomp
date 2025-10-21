@@ -1,0 +1,29 @@
+// ARQUIVO DE ERROS — vários casos de erro sintático
+// Dica: seu parser para no primeiro erro. Para ver os próximos, comente o bloco anterior
+// ou habilite recuperação de erro no parser (error/yyerrok).
+
+/* 1) Falta ';' após declaração */
+let a: int = 1
+print(a);
+
+/* 2) 'else' solto (sem if correspondente) */
+else { print(a); }
+
+/* 3) for com atribuição no 2º campo (condição) — não permitido no seu parser */
+for (let i: int = 0; i = 3; i = i + 1) { out(i); }
+
+/* 4) 'break' fora de laço */
+break;
+
+/* 5) when com parêntese faltando */
+when (a < 10 { out(a); }
+
+/* 6) every sem 'ms' */
+every 100 { out(clock_ms); }
+
+/* 7) read com identificador no lugar de sensor */
+read(a);
+
+/* 8) bloco não fechado */
+if (a < 10) {
+  print(a);
