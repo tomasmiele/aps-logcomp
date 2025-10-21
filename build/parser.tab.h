@@ -52,35 +52,40 @@
      BREAK = 268,
      CONTINUE = 269,
      PRINT = 270,
-     SENSOR = 271,
-     IDENT = 272,
-     INT_LIT = 273,
-     EQ = 274,
-     NEQ = 275,
-     LE = 276,
-     GE = 277,
-     LT = 278,
-     GT = 279,
-     AND = 280,
-     OR = 281,
-     NOT = 282,
-     ASSIGN = 283,
-     PLUS = 284,
-     MINUS = 285,
-     STAR = 286,
-     SLASH = 287,
-     MOD = 288,
-     LPAREN = 289,
-     RPAREN = 290,
-     LBRACE = 291,
-     RBRACE = 292,
-     COMMA = 293,
-     SEMI = 294,
-     COLON = 295,
-     COLON_EQ = 296,
-     DOT = 297,
-     NO_ELSE = 298,
-     UMINUS = 299
+     OUT = 271,
+     READ = 272,
+     EVERY = 273,
+     WHEN = 274,
+     MS = 275,
+     TEMP = 276,
+     DOOROPEN = 277,
+     CLOCK_MS = 278,
+     IDENT = 279,
+     INT_LIT = 280,
+     EQ = 281,
+     NEQ = 282,
+     LE = 283,
+     GE = 284,
+     LT = 285,
+     GT = 286,
+     AND = 287,
+     OR = 288,
+     ASSIGN = 289,
+     PLUS = 290,
+     MINUS = 291,
+     STAR = 292,
+     SLASH = 293,
+     MOD = 294,
+     NOT = 295,
+     LPAREN = 296,
+     RPAREN = 297,
+     LBRACE = 298,
+     RBRACE = 299,
+     COMMA = 300,
+     SEMI = 301,
+     COLON = 302,
+     UMINUS = 303,
+     NO_ELSE = 304
    };
 #endif
 /* Tokens.  */
@@ -97,35 +102,40 @@
 #define BREAK 268
 #define CONTINUE 269
 #define PRINT 270
-#define SENSOR 271
-#define IDENT 272
-#define INT_LIT 273
-#define EQ 274
-#define NEQ 275
-#define LE 276
-#define GE 277
-#define LT 278
-#define GT 279
-#define AND 280
-#define OR 281
-#define NOT 282
-#define ASSIGN 283
-#define PLUS 284
-#define MINUS 285
-#define STAR 286
-#define SLASH 287
-#define MOD 288
-#define LPAREN 289
-#define RPAREN 290
-#define LBRACE 291
-#define RBRACE 292
-#define COMMA 293
-#define SEMI 294
-#define COLON 295
-#define COLON_EQ 296
-#define DOT 297
-#define NO_ELSE 298
-#define UMINUS 299
+#define OUT 271
+#define READ 272
+#define EVERY 273
+#define WHEN 274
+#define MS 275
+#define TEMP 276
+#define DOOROPEN 277
+#define CLOCK_MS 278
+#define IDENT 279
+#define INT_LIT 280
+#define EQ 281
+#define NEQ 282
+#define LE 283
+#define GE 284
+#define LT 285
+#define GT 286
+#define AND 287
+#define OR 288
+#define ASSIGN 289
+#define PLUS 290
+#define MINUS 291
+#define STAR 292
+#define SLASH 293
+#define MOD 294
+#define NOT 295
+#define LPAREN 296
+#define RPAREN 297
+#define LBRACE 298
+#define RBRACE 299
+#define COMMA 300
+#define SEMI 301
+#define COLON 302
+#define UMINUS 303
+#define NO_ELSE 304
 
 
 

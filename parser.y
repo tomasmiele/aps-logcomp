@@ -1,155 +1,196 @@
 %{
-/* Parser somente sintático: não construímos AST, só validamos a forma */
-#include <stdio.h>
-#include <stdlib.h>
+  #include <stdio.h>
+  #include <stdlib.h>
 
-/* Protótipo do scanner gerado pelo Flex */
-int yylex(void);
-void yyerror(const char *s) { fprintf(stderr, "Erro sintático (linha %d): %s\n", yylineno, s); }
-extern int yylineno;
+  int yylex(void);
+  extern int yylineno;
+  void yyerror(const char *s) { fprintf(stderr, "Erro sintático (linha %d): %s\n", yylineno, s); }
 %}
 
-/* ----------------- Tokens ----------------- */
-%token LET CONST KW_INT KW_BOOL
-%token TRUE_LIT FALSE_LIT
+%start program
+
+/* TOKENS */
+%token LET CONST KW_INT KW_BOOL TRUE_LIT FALSE_LIT
 %token IF ELSE WHILE FOR BREAK CONTINUE
-%token PRINT SENSOR
+%token PRINT OUT READ EVERY WHEN MS
+%token TEMP DOOROPEN CLOCK_MS
 %token IDENT INT_LIT
+%token EQ NEQ LE GE LT GT AND OR
+%token ASSIGN PLUS MINUS STAR SLASH MOD NOT
+%token LPAREN RPAREN LBRACE RBRACE COMMA SEMI COLON
 
-%token EQ NEQ LE GE LT GT
-%token AND OR NOT
-%token ASSIGN PLUS MINUS STAR SLASH MOD
-%token LPAREN RPAREN LBRACE RBRACE COMMA SEMI COLON COLON_EQ
-%token DOT
-
-%nonassoc NO_ELSE
-%nonassoc ELSE
-
-/* ----------------- Precedência (baixa -> alta) ----------------- */
+/* Precedência */
 %left OR
 %left AND
 %left EQ NEQ
 %left LT LE GT GE
 %left PLUS MINUS
 %left STAR SLASH MOD
-%right NOT
-%right UMINUS
-
-%start program
+%right NOT UMINUS
+%nonassoc NO_ELSE
+%nonassoc ELSE
 
 %%
 
 program
-    : stmt_list
-    ;
+  : /* vazio */
+  | program item
+  ;
 
-stmt_list
-    : stmt
-    | stmt_list stmt
-    ;
+item
+  : declaration
+  | statement
+  ;
 
-stmt
-    : var_decl SEMI
-    | assign    SEMI
-    | print_stmt SEMI
-    | if_stmt
-    | while_stmt
-    | for_stmt
-    | block
-    | BREAK SEMI
-    | CONTINUE SEMI
-    ;
+declaration
+  : var_decl
+  | const_decl
+  ;
 
-/* ---------- Bloco ---------- */
-block
-    : LBRACE stmt_list RBRACE
-    | LBRACE RBRACE
-    ;
-
-/* ---------- Declarações ---------- */
 var_decl
-    : LET IDENT COLON type                 /* let x: int; */
-    | LET IDENT COLON type ASSIGN expr     /* let x: int = 0; */
-    | CONST IDENT COLON type ASSIGN expr   /* const y: bool = true; */
-    ;
+  : LET IDENT COLON type opt_init SEMI
+  ;
+
+const_decl
+  : CONST IDENT COLON type ASSIGN expression SEMI
+  ;
 
 type
-    : KW_INT
-    | KW_BOOL
-    ;
+  : KW_INT
+  | KW_BOOL
+  ;
 
-/* ---------- Atribuição ---------- */
+opt_init
+  : /* vazio */
+  | ASSIGN expression
+  ;
+
+statement
+  : block
+  | assign SEMI
+  | if_stmt
+  | while_stmt
+  | for_stmt
+  | io_stmt
+  | event_stmt
+  | BREAK SEMI
+  | CONTINUE SEMI
+  | SEMI
+  ;
+
+block
+  : LBRACE block_items RBRACE
+  ;
+
+block_items
+  : /* vazio */
+  | block_items declaration
+  | block_items statement
+  ;
+
 assign
-    : IDENT ASSIGN expr                    /* (propositalmente) não permitimos sensor.* à esquerda */
-    ;
+  : lvalue ASSIGN expression
+  ;
 
-/* ---------- Comandos ---------- */
-print_stmt
-    : PRINT LPAREN expr RPAREN
-    ;
+lvalue
+  : IDENT
+  ;
 
 if_stmt
-  : IF LPAREN expr RPAREN stmt %prec NO_ELSE
-  | IF LPAREN expr RPAREN stmt ELSE stmt
+  : IF LPAREN expression RPAREN statement %prec NO_ELSE
+  | IF LPAREN expression RPAREN statement ELSE statement
   ;
 
 while_stmt
-    : WHILE LPAREN expr RPAREN stmt
-    ;
+  : WHILE LPAREN expression RPAREN statement
+  ;
 
-/* for ( init? ; cond? ; step? ) stmt */
 for_stmt
-    : FOR LPAREN opt_init SEMI opt_expr SEMI opt_step RPAREN stmt
-    ;
+  : FOR LPAREN for_init SEMI opt_expr SEMI opt_expr RPAREN statement
+  ;
 
-opt_init
-    : /* vazio */
-    | var_decl
-    | assign
-    ;
+for_init
+  : /* vazio */
+  | LET IDENT COLON type opt_init
+  | lvalue ASSIGN expression
+  ;
 
 opt_expr
-    : /* vazio */
-    | expr
-    ;
+  : /* vazio */
+  | expression
+  ;
 
-opt_step
-    : /* vazio */
-    | assign
-    ;
+io_stmt
+  : PRINT LPAREN expression RPAREN SEMI
+  | OUT   LPAREN expression RPAREN SEMI
+  | READ  LPAREN sensor_ref RPAREN SEMI
+  ;
 
-/* ---------- Expressões ---------- */
-expr
-    : expr OR  expr
-    | expr AND expr
-    | expr EQ  expr
-    | expr NEQ expr
-    | expr LT  expr
-    | expr LE  expr
-    | expr GT  expr
-    | expr GE  expr
-    | expr PLUS  expr
-    | expr MINUS expr
-    | expr STAR  expr
-    | expr SLASH expr
-    | expr MOD   expr
-    | NOT expr
-    | MINUS expr %prec UMINUS
-    | LPAREN expr RPAREN
-    | primary
-    ;
-
-primary
-    : INT_LIT
-    | TRUE_LIT
-    | FALSE_LIT
-    | IDENT
-    | sensor_ref
-    ;
+event_stmt
+  : EVERY INT_LIT MS block
+  | WHEN  LPAREN expression RPAREN block
+  ;
 
 sensor_ref
-    : SENSOR DOT IDENT                      /* sensor.temp, sensor.time, ... */
-    ;
+  : TEMP
+  | DOOROPEN
+  | CLOCK_MS
+  ;
+
+expression
+  : logical_or
+  ;
+
+logical_or
+  : logical_and
+  | logical_or OR logical_and
+  ;
+
+logical_and
+  : equality
+  | logical_and AND equality
+  ;
+
+equality
+  : relational
+  | equality EQ relational
+  | equality NEQ relational
+  ;
+
+relational
+  : additive
+  | relational LT additive
+  | relational LE additive
+  | relational GT additive
+  | relational GE additive
+  ;
+
+additive
+  : multiplicative
+  | additive PLUS  multiplicative
+  | additive MINUS multiplicative
+  ;
+
+multiplicative
+  : unary
+  | multiplicative STAR  unary
+  | multiplicative SLASH unary
+  | multiplicative MOD   unary
+  ;
+
+unary
+  : primary
+  | NOT unary
+  | MINUS unary %prec UMINUS
+  ;
+
+primary
+  : INT_LIT
+  | TRUE_LIT
+  | FALSE_LIT
+  | IDENT
+  | sensor_ref
+  | LPAREN expression RPAREN
+  ;
 
 %%
-
