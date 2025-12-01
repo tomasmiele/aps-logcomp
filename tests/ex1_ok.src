@@ -1,5 +1,3 @@
-// OK — declarações, if/else-if/else, while, for, I/O e sensores
-
 let x: int = 0;
 let y: int;
 const LIM: int = 5;
@@ -14,7 +12,18 @@ if (x < LIM) {
 }
 
 while (x < 10) {
-  print(x);
+  y = temp;
+  print(y);
+
+  if (x == 3) {
+    x = x + 1;
+    continue;
+  }
+
+  if (x >= 8) {
+    break;
+  }
+
   x = x + 1;
 }
 

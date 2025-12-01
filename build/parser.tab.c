@@ -168,7 +168,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "parser.y"
+#line 1 "./parser.y"
 
   #include <stdio.h>
   #include <stdlib.h>
@@ -1754,6 +1754,6 @@ yyreturn:
 }
 
 
-#line 197 "parser.y"
+#line 197 "./parser.y"
 
 

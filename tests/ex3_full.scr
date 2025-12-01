@@ -1,0 +1,61 @@
+let currentTemp : int = 0;
+let doorIsOpen  : bool = false;
+let sum         : int = 0;
+
+const MAX_TEMP  : int = 80;
+const LIMIT     : int = 10;
+
+print("=== Inicio do teste da linguagem ===");
+
+every 1000 ms {
+    let t : int = temp;
+    let now : int = clock_ms;
+
+    print("Tick do every 1000 ms");
+    print(t);
+    print(now);
+}
+
+when (doorOpen == true) {
+    print("Alerta: porta aberta!");
+}
+
+for (let i : int = 0; i < LIMIT; i = i + 1) {
+
+    if (i % 2 == 0) {
+        print("i eh par");
+        sum = sum + i;
+    } else if (i == 5) {
+        print("i eh 5, usando continue");
+        continue;  // volta para o topo do for
+    } else {
+        print("i eh impar");
+        sum = sum - 1;
+    }
+
+    if (sum > MAX_TEMP) {
+        print("sum passou do MAX_TEMP, dando break");
+        break;
+    }
+}
+
+while ( (currentTemp < MAX_TEMP) && (!doorIsOpen) ) {
+
+    // atualiza variáveis a partir de sensores
+    currentTemp = temp;
+    doorIsOpen  = doorOpen;
+
+    print("Loop while: temperatura atual");
+    print(currentTemp);
+
+    if ( (currentTemp >= MAX_TEMP) || (doorIsOpen == true) ) {
+        print("Saindo do while por condicao de seguranca");
+        break;
+    }
+}
+
+print("Valor final de sum:");
+out(sum);
+
+print("=== Fim do teste da linguagem ===");
+;
